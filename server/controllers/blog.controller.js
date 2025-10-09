@@ -2,6 +2,7 @@
 import { createReadStream } from "fs";
 import imagekit from "../config/imagekit.js";
 import Blog from "../models/blog.model.js";
+import Comment from "../models/comment.model.js";
 
 export const addBlog = async (req, res) => {
   try {
@@ -110,5 +111,30 @@ export const togglePublish = async (req, res) => {
     return res
       .status(500)
       .json({ success: false, message: "Internal Server error" });
+  }
+};
+
+export const addComment = async (req, res) => {
+  try {
+    const { blog, name, content } = req.body;
+    await Comment.create({ blog, name, content });
+    res.json({ success: true, message: "Comment added for review" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+export const getBlogComment = async (req, res) => {
+  try {
+    const { blogId } = req.params;
+    const comments = await Comment.find({
+      blog: blogId,
+      isApproved: true,
+    }).sort({ createdAt: -1 });
+    res.json({ success: true, comments });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };

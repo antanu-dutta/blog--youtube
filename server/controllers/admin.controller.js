@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken";
+import Blog from "../models/blog.model.js";
+import Comment from "../models/comment.model.js";
 
 export const adminLogin = async (req, res) => {
   try {
@@ -19,6 +21,68 @@ export const adminLogin = async (req, res) => {
     return res
       .status(500)
       .json({ success: false, message: "Internal Server Error" });
-    // res.status(500).json(response(false, `Internal Server Error`));
+  }
+};
+
+export const getAllBlogsAdmin = async (req, res) => {
+  try {
+    const blogs = (await Blog.find({})).toSorted({ createdAt: -1 });
+    res.json({ success: true, blogs });
+  } catch (error) {
+    console.error(error);
+    res.json({ success: false, message: "Internal Server error" });
+  }
+};
+
+export const getAllComments = async (req, res) => {
+  try {
+    const comments = (await Comment.find({}).populate("blog")).toSorted({
+      createdAt: -1,
+    });
+    res.json({ success: true, comments });
+  } catch (error) {
+    console.error(error);
+    res.json({ success: false, message: "Internal Server error" });
+  }
+};
+
+export const getDashboard = async (req, res) => {
+  try {
+    const recentBlogs = await Blog.find({}).sort({ createdAt: -1 }).limit(5);
+    const blogs = await Blog.countDocuments();
+    const comments = await Comment.countDocuments();
+    const drafts = await Blog.countDocuments({ isPublished: false });
+
+    const dashboardData = { recentBlogs, blogs, comments, drafts };
+    res.json({ success: true, dashboardData });
+  } catch (error) {
+    console.error(error);
+    res.json({ success: false, message: "Internal Server error" });
+  }
+};
+
+export const deleteCommentById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Comment.findByIdAndDelete(id);
+
+    // delete all comment associated with the blog
+    await Comment.deleteMany({ blog: id });
+
+    res.json({ success: true, message: "Comment Deleted Successfully" });
+  } catch (error) {
+    console.error(error);
+    res.json({ success: false, message: "Internal Server error" });
+  }
+};
+
+export const approveCommentById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Comment.findByIdAndUpdate(id, { isApproved: true });
+    res.json({ success: true, message: "Comment Deleted Successfully" });
+  } catch (error) {
+    console.error(error);
+    res.json({ success: false, message: "Internal Server error" });
   }
 };
