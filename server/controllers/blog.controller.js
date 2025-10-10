@@ -4,6 +4,7 @@ import imagekit from "../config/imagekit.js";
 import Blog from "../models/blog.model.js";
 import Comment from "../models/comment.model.js";
 
+//  ! add blog
 export const addBlog = async (req, res) => {
   try {
     const { title, subTitle, description, category, isPublished } = req.body;
@@ -30,12 +31,7 @@ export const addBlog = async (req, res) => {
     const optimizedImageUrl = imagekit.helper.buildSrc({
       urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
       src: response.filePath,
-      transformation: [
-        { width: 1280, format: "webp", quality: "auto" },
-        // { quality: "auto" }, // auto compression
-        // { format: "webp" }, // convert tto modern format
-        // { width: "1280" }, // width resizing
-      ],
+      transformation: [{ width: 1280, format: "webp", quality: "auto" }],
     });
 
     const image = optimizedImageUrl;
@@ -57,6 +53,7 @@ export const addBlog = async (req, res) => {
   }
 };
 
+// ! get all blogs
 export const getAllBlogs = async (req, res) => {
   try {
     const blogs = await Blog.find({ isPublished: true });
@@ -69,6 +66,7 @@ export const getAllBlogs = async (req, res) => {
   }
 };
 
+// ! get blogs by id
 export const getBlogById = async (req, res) => {
   try {
     const { blogId } = req.params;
@@ -85,6 +83,7 @@ export const getBlogById = async (req, res) => {
   }
 };
 
+// ! delete blogs by id
 export const deleteBlogById = async (req, res) => {
   try {
     const { blogId } = req.params;
@@ -99,6 +98,7 @@ export const deleteBlogById = async (req, res) => {
   }
 };
 
+// ! toggle publish status
 export const togglePublish = async (req, res) => {
   try {
     const { blogId } = req.params;
@@ -114,6 +114,7 @@ export const togglePublish = async (req, res) => {
   }
 };
 
+// ! add comment
 export const addComment = async (req, res) => {
   try {
     const { blog, name, content } = req.body;
@@ -125,6 +126,7 @@ export const addComment = async (req, res) => {
   }
 };
 
+// ! get blog comments
 export const getBlogComment = async (req, res) => {
   try {
     const { blogId } = req.params;
