@@ -32,7 +32,7 @@ const AppProvider = ({ children }) => {
     }
   }, []);
 
-  const value = { navigate, token, blogs, input, axios };
+  const value = { navigate, token, blogs, input, axios, setToken, setInput };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 

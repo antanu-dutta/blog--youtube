@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAppContext } from "../../context/AppContext";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const { axios, setToken } = useAppContext();
@@ -13,11 +14,13 @@ const Login = () => {
         email,
         password,
       });
-
+      console.log(data);
       if (data.success) {
         setToken(data.token);
         localStorage.setItem("token", data.token);
         axios.defaults.headers.common["token"] = data.token;
+      } else {
+        toast.error(data.message);
       }
     } catch (error) {
       toast.error(error.message);
