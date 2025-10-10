@@ -5,10 +5,10 @@ const ai = new GoogleGenAI({
   apiKey: "AIzaSyCzZ7FGqG7BVai52G27CSonMXGnFvELYRo",
 });
 
-export const GET_AI_DESCRIPTION = async () => {
+export const GET_AI_DESCRIPTION = async (topic) => {
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
-    contents: "How Javascript works",
+    contents: topic,
   });
   return response.text;
 };

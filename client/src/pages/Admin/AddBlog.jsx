@@ -65,13 +65,15 @@ const AddBlog = () => {
 
   const generateContent = async () => {
     try {
-      console.log("generating");
+      if (!title) return toast.error("Please enter a title");
       setIsGenerating(true);
       const text = await GET_AI_DESCRIPTION(title);
       quillRef.current.root.innerHTML = marked.parse(text);
       setIsGenerating(false);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsGenerating(false);
     }
   };
 
