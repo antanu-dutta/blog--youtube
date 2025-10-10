@@ -7,11 +7,14 @@ import Comment from "../models/comment.model.js";
 //  ! add blog
 export const addBlog = async (req, res) => {
   try {
-    const { title, subTitle, description, category, isPublished } = req.body;
+    const { title, subTitle, description, category, isPublished } = JSON.parse(
+      req.body.blog
+    );
 
     const imageFile = req.file;
     // console.log(imageFile);
     // check if all fields are present
+    console.log({ title, description, category, imageFile });
     if (!title || !description || !category || !imageFile) {
       return res.json({ success: false, message: "Missing required fields" });
     }
@@ -118,10 +121,11 @@ export const togglePublish = async (req, res) => {
 export const addComment = async (req, res) => {
   try {
     const { blog, name, content } = req.body;
+    console.log(blog);
     await Comment.create({ blog, name, content });
     res.json({ success: true, message: "Comment added for review" });
   } catch (error) {
-    console.error(error);
+    console.error("error while adding comment", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };

@@ -3,12 +3,17 @@ import { assets } from "../assets/assets";
 import { useAppContext } from "../context/AppContext";
 
 const Header = () => {
-  const { setInput } = useAppContext();
+  const { input, setInput } = useAppContext();
   const inputRef = useRef(null);
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
     setInput(inputRef.current.value);
+  };
+
+  const onClear = () => {
+    setInput("");
+    inputRef.current.value = "";
   };
 
   return (
@@ -46,6 +51,16 @@ const Header = () => {
             Search
           </button>
         </form>
+      </div>
+      <div className="text-center">
+        {input && (
+          <button
+            onClick={onClear}
+            className="border font-light text-xs py-1 px-3 rounded-sm shadow-custom-sm cursor-pointer"
+          >
+            Clear Search
+          </button>
+        )}
       </div>
       <img
         src={assets.gradientBackground}

@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@google/genai": "^1.23.0",
     "@tailwindcss/vite": "^4.1.13",
     "axios": "^1.12.2",
+    "marked": "^16.4.0",
     "moment": "^2.30.1",
     "motion": "^12.23.16",
     "quill": "^2.0.3",

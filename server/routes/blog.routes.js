@@ -17,9 +17,9 @@ router.post("/add", auth, upload.single("image"), addBlog);
 router.get("/all", getAllBlogs);
 router.get("/:blogId", getBlogById);
 router.delete("/:blogId", deleteBlogById);
-router.post("/:blogId", auth, togglePublish);
+router.post("/toggle/:blogId", auth, togglePublish);
 
 router.post("/add-comment", addComment);
-router.get("/comments", getBlogComment);
+router.get("/comments/:blogId", getBlogComment);
 
 export default router;
