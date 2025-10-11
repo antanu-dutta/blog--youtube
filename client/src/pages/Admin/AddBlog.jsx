@@ -5,6 +5,7 @@ import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 import { marked } from "marked";
 import { GET_AI_DESCRIPTION } from "../../config/gemini";
+import Loader from "../../components/Loader";
 
 const AddBlog = () => {
   const editorRef = useRef(null);
@@ -126,6 +127,11 @@ const AddBlog = () => {
         <p className="mt-4">Description</p>
         <div className="max-w-lg h-74 pb-16 sm:pb-10 pt-2 relative">
           <div ref={editorRef}></div>
+          {isGenerating && (
+            <div className="absolute top-0 left-0 w-full h-full bg-gray-700/20 flex justify-center items-center">
+              <Loader />
+            </div>
+          )}
           <button
             type="button"
             onClick={generateContent}

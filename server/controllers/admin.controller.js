@@ -26,7 +26,7 @@ export const adminLogin = async (req, res) => {
 
 export const getAllBlogsAdmin = async (req, res) => {
   try {
-    const blogs = (await Blog.find({})).toSorted({ createdAt: -1 });
+    const blogs = await Blog.find({}).sort({ createdAt: -1 });
     res.json({ success: true, blogs });
   } catch (error) {
     console.error(error);
@@ -36,7 +36,7 @@ export const getAllBlogsAdmin = async (req, res) => {
 
 export const getAllComments = async (req, res) => {
   try {
-    const comments = (await Comment.find({}).populate("blog")).toSorted({
+    const comments = await Comment.find({}).populate("blog").sort({
       createdAt: -1,
     });
     res.json({ success: true, comments });
@@ -80,7 +80,7 @@ export const approveCommentById = async (req, res) => {
   try {
     const { id } = req.params;
     await Comment.findByIdAndUpdate(id, { isApproved: true });
-    res.json({ success: true, message: "Comment Deleted Successfully" });
+    res.json({ success: true, message: "Comment Approved" });
   } catch (error) {
     console.error(error);
     res.json({ success: false, message: "Internal Server error" });
